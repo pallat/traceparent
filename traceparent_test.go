@@ -14,3 +14,13 @@ func TestParse(t *testing.T) {
 		t.Errorf("%s parse to %s\n", want, get)
 	}
 }
+
+func TestNewSpan(t *testing.T) {
+	tp := New()
+
+	newTP := tp.NewSpan()
+
+	if tp.sp.TraceID != newTP.sp.TraceID {
+		t.Errorf("origin traceID %s <> new traceID %s\n", tp.sp.TraceIDString(), newTP.sp.TraceIDString())
+	}
+}
