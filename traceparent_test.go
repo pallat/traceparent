@@ -1,6 +1,7 @@
 package traceparent
 
 import (
+	"fmt"
 	"testing"
 )
 
@@ -30,4 +31,12 @@ func TestNewSpan(t *testing.T) {
 			t.Errorf("origin SpanID %s == new SpanID %s\n", tp.TraceIDString(), newTP.TraceIDString())
 		}
 	})
+}
+
+func TestX(t *testing.T) {
+	tp := Parse("00-0af7651916cd43dd8448eb211c80319c-b7ad6b7169203331-01")
+
+	span := tp.NewSpan()
+
+	fmt.Println(tp, span)
 }
