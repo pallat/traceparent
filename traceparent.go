@@ -64,7 +64,7 @@ func (tp *TraceParent) NewSpan() TraceParent {
 	id := defIDGenerator()
 	sp.SpanID = id.NewSpanID()
 
-	sp.TraceFlags = 1
+	sp.TraceFlags = tp.TraceFlags
 
 	return TraceParent{sp}
 }
