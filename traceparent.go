@@ -27,6 +27,7 @@ func New() TraceParent {
 	return TraceParent{sp}
 }
 
+// Parse parse traceparent string to TraceParent
 func Parse(parent string) TraceParent {
 	if parent == "" {
 		return New()
@@ -55,6 +56,7 @@ func (tp TraceParent) String() string {
 		tp.TraceFlags&core.TraceFlagsSampled)
 }
 
+// NewSpan make new spanID with same traceID
 func (tp *TraceParent) NewSpan() TraceParent {
 	sp := core.EmptySpanContext()
 	sp.TraceID = tp.TraceID
