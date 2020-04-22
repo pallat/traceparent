@@ -15,21 +15,19 @@ import (
 const supportedVersion = 0
 
 // TraceParent composite go.opentelemetry.io/otel/api/core SpanContext
-type TraceParent struct {
-	sp core.SpanContext
-}
+type TraceParent struct{ core.SpanContext }
 
 // New returns *TraceParent
-func New() *TraceParent {
+func New() TraceParent {
 	sp := core.EmptySpanContext()
 	id := defIDGenerator()
 	sp.TraceID = id.NewTraceID()
 	sp.SpanID = id.NewSpanID()
 
-	return &TraceParent{sp: sp}
+	return TraceParent{sp}
 }
 
-func Parse(parent string) *TraceParent {
+func Parse(parent string) TraceParent {
 	if parent == "" {
 		return New()
 	}
@@ -46,33 +44,25 @@ func Parse(parent string) *TraceParent {
 	traceFlagsBytes, _ := hex.DecodeString(token[3])
 	sp.TraceFlags = traceFlagsBytes[0]
 
-	return &TraceParent{sp: sp}
+	return TraceParent{sp}
 }
 
-func (tp *TraceParent) String() string {
+func (tp TraceParent) String() string {
 	return fmt.Sprintf("%.2x-%s-%.16x-%.2x",
 		supportedVersion,
-		tp.sp.TraceIDString(),
-		tp.sp.SpanID,
-		tp.sp.TraceFlags&core.TraceFlagsSampled)
+		tp.TraceIDString(),
+		tp.SpanID,
+		tp.TraceFlags&core.TraceFlagsSampled)
 }
 
-func (tp *TraceParent) TraceID() string {
-	return tp.sp.TraceIDString()
-}
-
-func (tp *TraceParent) SpanID() string {
-	return fmt.Sprintf("%.16x", tp.sp.SpanID)
-}
-
-func (tp *TraceParent) NewSpan() *TraceParent {
+func (tp *TraceParent) NewSpan() TraceParent {
 	sp := core.EmptySpanContext()
-	sp.TraceID = tp.sp.TraceID
+	sp.TraceID = tp.TraceID
 
 	id := defIDGenerator()
 	sp.SpanID = id.NewSpanID()
 
-	return &TraceParent{sp: sp}
+	return TraceParent{sp}
 }
 
 func defIDGenerator() *defaultIDGenerator {

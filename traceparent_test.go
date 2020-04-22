@@ -20,7 +20,14 @@ func TestNewSpan(t *testing.T) {
 
 	newTP := tp.NewSpan()
 
-	if tp.sp.TraceID != newTP.sp.TraceID {
-		t.Errorf("origin traceID %s <> new traceID %s\n", tp.sp.TraceIDString(), newTP.sp.TraceIDString())
-	}
+	t.Run("", func(t *testing.T) {
+		if tp.TraceID != newTP.TraceID {
+			t.Errorf("origin traceID %s <> new traceID %s\n", tp.TraceIDString(), newTP.TraceIDString())
+		}
+	})
+	t.Run("", func(t *testing.T) {
+		if tp.SpanIDString() == newTP.SpanIDString() {
+			t.Errorf("origin SpanID %s == new SpanID %s\n", tp.TraceIDString(), newTP.TraceIDString())
+		}
+	})
 }
